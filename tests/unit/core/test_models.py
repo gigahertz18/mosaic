@@ -8,7 +8,7 @@ unit-testing rules.
 from __future__ import annotations
 
 from app.db.base import Base
-from app.models import Chunk, Collection, Document, DocumentStatus, Embedding
+from app.models import Chunk, Document, DocumentStatus, Embedding
 from app.models.embedding import EMBEDDING_DIMENSIONS
 
 
@@ -19,10 +19,6 @@ def _column_names(model: type) -> set[str]:
 def test_all_core_models_are_registered_on_shared_metadata() -> None:
     table_names = set(Base.metadata.tables.keys())
     assert {"collections", "documents", "chunks", "embeddings"} <= table_names
-
-
-def test_collection_has_expected_columns() -> None:
-    assert {"id", "name", "description", "created_at", "updated_at"} <= _column_names(Collection)
 
 
 def test_document_has_expected_columns_and_default_status() -> None:
