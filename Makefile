@@ -6,7 +6,8 @@ RUN := $(COMPOSE) run --rm app
 EXEC := $(COMPOSE) exec app
 
 .PHONY: help up down build logs shell format format-fix lint typecheck \
-        test test-unit test-integration coverage migrate revision health clean
+        test test-unit test-integration coverage migrate-up revision health clean \
+		migrate-down revision-history
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -52,16 +53,27 @@ test-integration: ## Run integration tests only (requires db/minio running)
 	$(COMPOSE) up -d db minio
 	$(RUN) pytest tests/integration
 
+test-file: ## Run specific test file (usage: make test-file file=tests/unit/models)
+	$(RUN) pytest $(file)
+
 coverage: ## Run tests with coverage report
 	$(RUN) pytest --cov=app --cov-report=term-missing
 
-migrate: ## Apply database migrations
+migrate-up: ## Apply database migrations
 	$(COMPOSE) up -d db
 	$(RUN) alembic upgrade head
 
-revision: ## Generate a new Alembic revision (usage: make revision m="message")
+revision: ## Generate a new Alembic revision (usage: make revision msg="message")
 	$(COMPOSE) up -d db
-	$(RUN) alembic revision --autogenerate -m "$(m)"
+	$(RUN) alembic revision --autogenerate -m "$(msg)"
+
+migrate-down: ## Roll back the last database migration.
+	$(COMPOSE) up -d db
+	$(RUN) alembic downgrade -1
+
+revision-history: ## Show Alembic revision history
+	$(COMPOSE) up -d db
+	$(RUN) alembic history
 
 health: ## Curl the running app's health endpoint
 	curl -sf http://localhost:8000/health
