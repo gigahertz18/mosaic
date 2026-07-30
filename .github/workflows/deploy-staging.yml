@@ -1,0 +1,21 @@
+name: Deploy to Staging
+
+# Placeholder workflow. Deployment infrastructure has not been introduced
+# yet; this exists so the pipeline shape is in place from Milestone 1 and
+# can be filled in without restructuring CI later.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy (placeholder)
+        run: |
+          echo "Staging deployment is not yet configured."
+          echo "This job will build the production image and publish it to the staging environment once deployment infrastructure exists."

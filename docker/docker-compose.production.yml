@@ -1,0 +1,7 @@
+services:
+  app:
+    environment:
+      MOSAIC_ENVIRONMENT: production
+      MOSAIC_DEBUG: "false"
+      MOSAIC_LOG_LEVEL: WARNING
+      MOSAIC_LOG_JSON: "true"

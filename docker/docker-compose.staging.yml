@@ -1,0 +1,7 @@
+services:
+  app:
+    environment:
+      MOSAIC_ENVIRONMENT: staging
+      MOSAIC_DEBUG: "false"
+      MOSAIC_LOG_LEVEL: INFO
+      MOSAIC_LOG_JSON: "true"

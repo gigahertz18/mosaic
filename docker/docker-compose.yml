@@ -1,0 +1,68 @@
+name: mosaic
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+    ports:
+      - "8000:8000"
+    environment:
+      MOSAIC_ENVIRONMENT: local
+      MOSAIC_DEBUG: "true"
+      MOSAIC_DB_HOST: db
+      MOSAIC_DB_PORT: "5432"
+      MOSAIC_DB_USER: mosaic
+      MOSAIC_DB_PASSWORD: mosaic
+      MOSAIC_DB_NAME: mosaic
+      MOSAIC_STORAGE_ENDPOINT: minio:9000
+      MOSAIC_STORAGE_ACCESS_KEY: mosaic
+      MOSAIC_STORAGE_SECRET_KEY: mosaic123
+      MOSAIC_STORAGE_BUCKET: mosaic
+      MOSAIC_STORAGE_SECURE: "false"
+      MOSAIC_LOG_LEVEL: DEBUG
+      MOSAIC_LOG_JSON: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: mosaic
+      POSTGRES_PASSWORD: mosaic
+      POSTGRES_DB: mosaic
+    expose:
+      - "5432"
+    volumes:
+      - mosaic_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mosaic -d mosaic"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: mosaic
+      MINIO_ROOT_PASSWORD: mosaic123
+    expose:
+      - "9000"
+    ports:
+      - "9001:9001"
+    volumes:
+      - mosaic_minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mosaic_db_data:
+  mosaic_minio_data:
