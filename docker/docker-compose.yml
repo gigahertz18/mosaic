@@ -3,7 +3,7 @@ name: mosaic
 services:
   app:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile
       target: production
     ports:
