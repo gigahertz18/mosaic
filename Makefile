@@ -67,7 +67,7 @@ revision: ## Generate a new Alembic revision (usage: make revision msg="message"
 	$(COMPOSE) up -d db
 	$(RUN) alembic revision --autogenerate -m "$(msg)"
 
-migrate-down: ## Apply database migrations
+migrate-down: ## Roll back the last database migration.
 	$(COMPOSE) up -d db
 	$(RUN) alembic downgrade -1
 
