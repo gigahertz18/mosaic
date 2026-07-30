@@ -1,5 +1,7 @@
 services:
   app:
+    build:
+      target: dev
     environment:
       MOSAIC_ENVIRONMENT: ci
       MOSAIC_DEBUG: "false"
