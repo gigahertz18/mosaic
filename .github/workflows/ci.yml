@@ -58,6 +58,9 @@ jobs:
       - name: mypy
         run: make typecheck
 
+      - name: DB migration
+        run: make migrate-up
+
       - name: Unit tests
         run: make test-unit
 
