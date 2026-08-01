@@ -89,3 +89,18 @@ async def test_delete_removes_collection(repository: CollectionRepository) -> No
 async def test_delete_is_a_no_op_for_missing_collection(repository: CollectionRepository) -> None:
     # Should not raise even though nothing exists with this id.
     await repository.delete(uuid.uuid4())
+
+
+async def test_get_by_name_returns_matching_collection(repository: CollectionRepository) -> None:
+    created = await repository.create(_make_collection(name="unique-name"))
+
+    fetched = await repository.get_by_name("unique-name")
+
+    assert fetched is not None
+    assert fetched.id == created.id
+
+
+async def test_get_by_name_returns_none_when_missing(repository: CollectionRepository) -> None:
+    fetched = await repository.get_by_name("non-existent-name")
+
+    assert fetched is None

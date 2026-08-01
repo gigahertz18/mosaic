@@ -23,3 +23,11 @@ class CollectionRepository(BaseRepository[Collection]):
 
     def __init__(self, session: AsyncSession) -> None:
         super().__init__(session, Collection)
+
+    async def get_by_name(self, name: str) -> Collection | None:
+        """Lookup a collection by its exact, case-sensitive name.
+        This exists for lookups such as "does a collection with this name
+        already exist?", needed by callers later.
+        """
+
+        return await self._first(self.model.name == name)
