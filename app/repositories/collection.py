@@ -18,7 +18,7 @@ class CollectionRepository(BaseRepository[Collection]):
 
     ``create``, ``get_by_id``, ``get_all``, ``update``, and ``delete`` are
     all inherited from :class:`BaseRepository` unchanged - Collection has
-    no lookups or persistence behavior beyond standard CRUD.
+    persistence behavior beyond standard CRUD, aside from the name lookup below.
     """
 
     def __init__(self, session: AsyncSession) -> None:

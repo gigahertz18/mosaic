@@ -39,7 +39,9 @@ from app.schemas.collection import CollectionCreate, CollectionUpdate
 
 
 def _coerce_payload[SchemaT: BaseModel](
-    schema_cls: type[SchemaT], data: SchemaT | None, kwargs: dict[str, Any]
+    schema_cls: type[SchemaT],
+    data: SchemaT | None,
+    kwargs: dict[str, Any],
 ) -> SchemaT:
     """Resolve a schema instance from either an explicit ``data`` object
     or loose keyword arguments, never both. Kwargs are routed through
